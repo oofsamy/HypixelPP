@@ -5,52 +5,64 @@
 #include <cpr/cpr.h>
 #include "nlohmann.hpp"
 #include <fmt/core.h>
+//\n
+
+int DebugInteger = 0;
+
+void DBG() {
+	DebugInteger++;
+	std::cout << DebugInteger << std::endl;
+}
 
 namespace Hypixel {
-	enum class ERank {
-		ADMIN,
-		MODERATOR,
-		HELPER,
-		NORMAL,
-	};
+	//enum class ERank {
+	//	ADMIN,
+	//	MODERATOR,
+	//	HELPER,
+	//	NORMAL,
+	//};
 
-	enum class EPackageRank {
-		MVP_PLUS,
-		MVP,
-		VIP_PLUS,
-		VIP,
-		NONE
-	};
-	
-	enum class EMonthlyPackageRank {
-		SUPERSTAR,
-		NONE
-	};
+	//enum class EPackageRank {
+	//	MVP_PLUS,
+	//	MVP,
+	//	VIP_PLUS,
+	//	VIP,
+	//	NONE
+	//};
+	//
+	//enum class EMonthlyPackageRank {
+	//	SUPERSTAR,
+	//	NONE
+	//};
 
-	enum class ECategory {
-		CONSUMABLES,
-		MISC,
-		ARMOR,
-		ACCESSORIES,
-		WEAPON,
-		BLOCKS,
-	};
-	
-	enum ETier {
-		COMMON,
-		UNCOMMON,
-		RARE,
-		EPIC,
-		LEGENDARY,
-		MYTHIC,
-		SPECIAL,
-	};
+	//enum class ECategory {
+	//	CONSUMABLES,
+	//	MISC,
+	//	ARMOR,
+	//	ACCESSORIES,
+	//	WEAPON,
+	//	BLOCKS,
+	//};
+	//
+	//enum ETier {
+	//	COMMON,
+	//	UNCOMMON,
+	//	RARE,
+	//	EPIC,
+	//	LEGENDARY,
+	//	MYTHIC,
+	//	SPECIAL,
+	//};
 
 	struct Friend {
 		std::string FriendID;
 		std::string UUIDSender;
 		std::string UUIDReciever;
 		uint64_t Started;
+
+		std::string ToString() {
+			return fmt::format("Friend ID: {}\nUUID Sender: {}\nUUID Reciever: {}\nStarted: {}\n");
+		}
 	};
 	
 	struct Game {
@@ -59,6 +71,10 @@ namespace Hypixel {
 		std::string Mode;
 		std::string Map;
 		uint64_t Ended;
+
+		std::string ToString() {
+			return fmt::format("Date: {}\nGame Type: {}\nMode: {}\nMap: {}\nEnded: {}\n");
+		}
 	};
 
 	struct Session {
@@ -66,6 +82,10 @@ namespace Hypixel {
 		std::string GameType;
 		std::string Mode;
 		std::string Map;
+
+		std::string ToString() {
+			return fmt::format("Online: {}\nGame Type: {}\nMode: {}\nMap: {}\n");
+		}
 	};
 
 	struct GuildMember {
@@ -73,16 +93,7 @@ namespace Hypixel {
 		std::string GuildRank;
 		uint64_t Joined;
 		uint16_t QuestParticipation;
-		//MAP OR SOMETHING 
-		//"expHistory": {
-		//	"2022-05-15": 1699,
-		//		"2022-05-14" : 12470,
-		//		"2022-05-13" : 15765,
-		//		"2022-05-12" : 11172,
-		//		"2022-05-11" : 3883,
-		//		"2022-05-10" : 0,
-		//		"2022-05-09" : 0
-		//}
+		uint32_t ExpHistory[7];
 	};
 
 	struct GuildRank {
@@ -90,6 +101,51 @@ namespace Hypixel {
 		bool Default;
 		uint8_t Priority;
 		uint64_t Created;
+
+		std::string ToString() {
+			return fmt::format("Name: {}\nDefault: {}\nPriority\nCreated: {}\n");
+		}
+	};
+
+	struct GuildAchievements {
+		uint32_t Winners;
+		uint32_t ExperienceKings;
+		uint32_t OnlinePlayers;
+
+		std::string ToString() {
+			return fmt::format("Winners: {}\nExperience Kings: {}\nOnline Players: {}\n");
+		}
+	};
+
+	struct GuildExpByGameType {
+		uint32_t Prototype;
+		uint32_t Pit;
+		uint32_t TntGames;
+		uint32_t WoolGames;
+		uint32_t SuperSmash;
+		uint32_t MCGO;
+		uint32_t SkyWars;
+		uint32_t Arcade;
+		uint32_t Replay;
+		uint32_t Duels;
+		uint32_t SMP;
+		uint32_t Walls3;
+		uint32_t UHC;
+		uint32_t Walls;
+		uint32_t Arena;
+		uint32_t SurvivalGames;
+		uint32_t Paintball;
+		uint32_t Legacy;
+		uint32_t Quakecraft;
+		uint32_t Gingerbread;
+		uint32_t Battleground;
+		uint32_t Housing;
+		uint32_t Skyblock;
+		uint32_t BuildBattle;
+		uint32_t Vampirez;
+		uint32_t Bedwars;
+		uint32_t MurderMystery;
+		uint32_t SpeedUHC;
 	};
 
 	struct AuctionBid {
@@ -98,6 +154,10 @@ namespace Hypixel {
 		std::string ProfileID;
 		uint32_t Amount;
 		uint64_t Timestamp;
+		
+		std::string ToString() {
+			return fmt::format("Auction ID: {}\nBidder UUID: {}\nProfile ID: {}\nAmount: {}\nTimestamp: {}\n");
+		}
 	};
 
 	struct Auction {
@@ -110,8 +170,8 @@ namespace Hypixel {
 		std::string ItemName;
 		std::string ItemLore;
 		//UNKNOWN STRING: EXTRA "Enchanted Book Enchanted Book Rejuvenate"
-		ECategory Category;
-		ETier Tier;
+		std::string Category;
+		std::string Tier;
 		uint32_t StartingBid;
 		//STRING BYTES, NEED NBT PARSER
 		bool Claimed;
@@ -158,6 +218,48 @@ namespace Hypixel {
 		BazaarQuickStatus QuickStatus;
 	};
 
+	struct _PlayerStat { std::string Name; };
+
+	struct UHCStats : _PlayerStat {
+		uint32_t Coins;
+		bool ClearupAchievement;
+		bool SavedStats;
+		std::string EquippedKit;
+		uint32_t Deaths;
+		uint32_t KitWorkingTools;
+	};
+
+	struct TNTGamesStats : _PlayerStat {
+		std::vector<std::string> Packages;
+		
+		uint32_t Coins;
+		uint32_t Wins;
+		uint32_t NewBloodWizardRegen;
+		uint32_t NewSpleefTripleshot;
+		uint32_t NewFireWizardExplode;
+		uint32_t NewSpleefDoubleJumps;
+		uint32_t NewIceWizardRegen;
+		uint32_t NewSpleefRepulsor;
+		uint32_t NewWitherWizardExplode;
+		uint32_t NewWitherWizardRegen;
+		uint32_t NewFireWizardRegen;
+		uint32_t NewTNTTagSpeedy;
+		uint32_t NewKineticWizardRegen;
+		uint32_t NewPvpRunDoubleJumps;
+		uint32_t NewBloodWizardExplode;
+		uint32_t NewKineticWizardRegen;
+		uint32_t NewTNTRunDoubleJumps;
+		uint32_t NewIceWizardExplode;
+		uint32_t RunPotionsSplashedOnPlayers;
+		uint32_t RecordTNTRun;
+		uint32_t DeathsTNTRun;
+		uint32_t Winstreak;
+		uint32_t KillsTNTTag;
+		uint32_t DeathsBowspleef;
+		uint32_t TagSpeedItUp;
+		uint64_t LastTourneyAd;
+	};
+
 	struct BaseResult {
 		uint8_t StatusCode;
 		std::string Cause;
@@ -176,16 +278,18 @@ namespace Hypixel {
 	};
 
 	struct PlayerDataResult : BaseResult {
+		std::string ID;
 		std::string UUID;
 		std::string DisplayName;
-		ERank Rank;
-		EPackageRank CurrentPackageRank;
-		EPackageRank NewPackageRank;
-		EMonthlyPackageRank MonthlyPackageRank;
 		uint64_t FirstLogin;
+		std::vector<std::string> KnownAliases;
+		std::vector<std::string> KnownAliasesLower;
 		uint64_t LastLogin;
+		std::string PlayerName; //I don't know why there is another field for this, maybe it's useful in some way, idk
+		std::vector<std::string> AchievementsOneTime;
+		uint32_t Karma;
+		std::vector<_PlayerStat> Stats;
 		uint64_t LastLogout;
-		//UNKNOWN STATS ARRAY
 	};
 
 	struct FriendsResult : BaseResult {
@@ -220,12 +324,19 @@ namespace Hypixel {
 		uint32_t Coins;
 		uint32_t CoinsEver;
 		uint64_t Created;
+		std::vector<GuildMember> Members;
 		std::vector<GuildRank> Ranks;
-		//ACHIEVEMENTS ARRAY
+		GuildAchievements Achievements;
 		uint32_t Experience;
+		std::vector<std::string> PreferredGames;
+		bool PubliclyListed;
+		std::string Tag;
+		std::string TagColor;
+		uint32_t ChatMute;
+		GuildExpByGameType ExpByGameType;
 	};
 
-	struct SkywarsDataResult : BaseResult {
+	struct RankedSkywarsDataResult : BaseResult {
 		std::string Key;
 		uint32_t Position;
 		uint32_t Score;
@@ -269,6 +380,102 @@ namespace Hypixel {
 class HypixelAPI {
 private:
 	std::string m_APIKEY;
+
+	Hypixel::GuildInformationResult GetGuild(std::string Response, int StatusCode) {
+		const auto Result = nlohmann::json::parse(Response);
+
+		if (Result["success"] == false) {
+			Hypixel::GuildInformationResult R{};
+
+			R.StatusCode = StatusCode;
+			R.Cause = Result["cause"];
+
+			return R;
+		} else {
+			Hypixel::GuildInformationResult R{};
+
+			R.StatusCode = StatusCode;
+			R.GuildID = Result["guild"]["_id"];
+			R.Name = Result["guild"]["name"];
+			R.NameLowered = Result["guild"]["name_lower"];
+			R.Coins = Result["guild"]["coins"];
+			R.CoinsEver = Result["guild"]["coinsEver"];
+			R.Created = Result["guild"]["created"];
+
+			for (int i = 0; i < Result["guild"]["members"].size(); i++) {
+				Hypixel::GuildMember M{};
+
+				M.UUID = Result["guild"]["members"][i]["uuid"];
+				M.UUID = Result["guild"]["members"][i]["rank"];
+				M.UUID = Result["guild"]["members"][i]["joined"];
+				M.UUID = Result["guild"]["members"][i]["questParticipation"];
+
+				for (int j = 0; j < Result["guild"]["members"][i]["expHistory"]; j++) {
+					M.ExpHistory[j] = Result["guild"]["members"][i]["expHistory"][j];
+				}
+
+				R.Members.push_back(M);
+			}
+
+			for (int i = 0; i < Result["guild"]["ranks"].size(); i++) {
+				Hypixel::GuildRank Rank{};
+
+				Rank.Name = Result["guild"]["ranks"][i]["name"];
+				Rank.Name = Result["guild"]["ranks"][i]["default"];
+				Rank.Name = Result["guild"]["ranks"][i]["tag"];
+				Rank.Name = Result["guild"]["ranks"][i]["created"];
+				Rank.Name = Result["guild"]["ranks"][i]["priority"];
+
+				R.Ranks.push_back(Rank);
+			}
+
+			R.Achievements.Winners = Result["guild"]["achievements"]["WINNERS"];
+			R.Achievements.ExperienceKings = Result["guild"]["achievements"]["EXPERIENCE_KINGS"];
+			R.Achievements.OnlinePlayers = Result["guild"]["achievements"]["ONLINE_PLAYERS"];
+
+			R.Experience = Result["guild"]["exp"];
+
+			for (int i = 0; i < Result["guild"]["preferredGames"].size(); i++) {
+				R.PreferredGames.push_back(Result["guild"]["preferredGames"][i]);
+			}
+
+			R.PubliclyListed = Result["guild"]["publiclyListed"];
+			R.Tag = Result["guild"]["tag"];
+			R.TagColor = Result["guild"]["tagColor"];
+			R.ChatMute = Result["guild"]["chatMute"];
+
+			R.ExpByGameType.Prototype = Result["guild"]["guildExpByGameType"]["PROTOTYPE"];
+			R.ExpByGameType.Pit = Result["guild"]["guildExpByGameType"]["PIT"];
+			R.ExpByGameType.TntGames = Result["guild"]["guildExpByGameType"]["TNTGAMES"];
+			R.ExpByGameType.WoolGames = Result["guild"]["guildExpByGameType"]["WOOL_GAMES"];
+			R.ExpByGameType.SuperSmash = Result["guild"]["guildExpByGameType"]["SUPER_SMASH"];
+			R.ExpByGameType.MCGO = Result["guild"]["guildExpByGameType"]["MCGO"];
+			R.ExpByGameType.SkyWars = Result["guild"]["guildExpByGameType"]["SKYWARS"];
+			R.ExpByGameType.Arcade = Result["guild"]["guildExpByGameType"]["ARCADE"];
+			R.ExpByGameType.Replay = Result["guild"]["guildExpByGameType"]["REPLAY"];
+			R.ExpByGameType.Duels = Result["guild"]["guildExpByGameType"]["DUELS"];
+			R.ExpByGameType.SMP = Result["guild"]["guildExpByGameType"]["SMP"];
+			R.ExpByGameType.Walls3 = Result["guild"]["guildExpByGameType"]["WALLS3"];
+			R.ExpByGameType.UHC = Result["guild"]["guildExpByGameType"]["UHC"];
+			R.ExpByGameType.Walls = Result["guild"]["guildExpByGameType"]["WALLS"];
+			R.ExpByGameType.Arena = Result["guild"]["guildExpByGameType"]["ARENA"];
+			R.ExpByGameType.SurvivalGames = Result["guild"]["guildExpByGameType"]["SURVIVAL_GAMES"];
+			R.ExpByGameType.Paintball = Result["guild"]["guildExpByGameType"]["PAINTBALL"];
+			R.ExpByGameType.Legacy = Result["guild"]["guildExpByGameType"]["LEGACY"];
+			R.ExpByGameType.Quakecraft = Result["guild"]["guildExpByGameType"]["QUAKECRAFT"];
+			R.ExpByGameType.Gingerbread = Result["guild"]["guildExpByGameType"]["GINGERBREAD"];
+			R.ExpByGameType.Battleground = Result["guild"]["guildExpByGameType"]["BATTLEGROUND"];
+			R.ExpByGameType.Housing = Result["guild"]["guildExpByGameType"]["HOUSING"];
+			R.ExpByGameType.Skyblock = Result["guild"]["guildExpByGameType"]["SKYBLOCK"];
+			R.ExpByGameType.BuildBattle = Result["guild"]["guildExpByGameType"]["BUILD_BATTLE"];
+			R.ExpByGameType.Vampirez = Result["guild"]["guildExpByGameType"]["VAMPIREZ"];
+			R.ExpByGameType.Bedwars = Result["guild"]["guildExpByGameType"]["BEDWARS"];
+			R.ExpByGameType.MurderMystery = Result["guild"]["guildExpByGameType"]["MURDER_MYSTERY"];
+			R.ExpByGameType.SpeedUHC = Result["guild"]["guildExpByGameType"]["SPEED_UHC"];
+
+			return R;
+		}
+	}
 public:
 	HypixelAPI(std::string APIKEY) : m_APIKEY(APIKEY) {};
 
@@ -343,53 +550,73 @@ public:
 			Hypixel::PlayerDataResult R{};
 			R.StatusCode = r.status_code;
 
-			R.UUID = Result["uuid"];
-			R.DisplayName = Result["displayname"];
+			R.UUID = Result["player"]["uuid"];
+			R.DisplayName = Result["player"]["displayname"];
+			R.FirstLogin = Result["player"]["FirstLogin"];
 
-			if (Result["rank"] == "ADMIN") {
-				R.Rank = Hypixel::ERank::ADMIN;
-			} else if (Result["rank"] == "MODERATOR") {
-				R.Rank = Hypixel::ERank::MODERATOR;
-			} else if (Result["rank"] == "HELPER") {
-				R.Rank = Hypixel::ERank::HELPER;
-			} else if (Result["rank"] == "NORMAL") {
-				R.Rank = Hypixel::ERank::NORMAL;
+			for (int i = 0; i < Result["player"]["knownAliases"].size(); i++) {
+				R.KnownAliases.push_back(Result["player"]["knownAliases"][i]);
+				R.KnownAliasesLower.push_back(Result["player"]["knownAliasesLower"][i]);
 			}
 
-			if (Result["packageRank"] == "MVP_PLUS") {
-				R.CurrentPackageRank = Hypixel::EPackageRank::MVP_PLUS;
-			} else if (Result["packageRank"] == "MVP") {
-				R.CurrentPackageRank = Hypixel::EPackageRank::MVP;
-			} else if (Result["packageRank"] == "VIP_PLUS") {
-				R.CurrentPackageRank = Hypixel::EPackageRank::VIP_PLUS;
-			} else if (Result["packageRank"] == "VIP") {
-				R.CurrentPackageRank = Hypixel::EPackageRank::VIP;
-			} else if (Result["packageRank"] == "NONE") {
-				R.CurrentPackageRank = Hypixel::EPackageRank::NONE;
+			R.LastLogin = Result["player"]["lastLogin"];
+			R.PlayerName = Result["player"]["playername"];
+
+			for (int i = 0; i < Result["player"]["achievementsOneTime"].size(); i++) {
+				R.AchievementsOneTime.push_back(Result["player"]["achievementsOneTime"][i]);
 			}
 
-			if (Result["newPackageRank"] == "MVP_PLUS") {
-				R.NewPackageRank = Hypixel::EPackageRank::MVP_PLUS;
-			} else if (Result["newPackageRank"] == "MVP") {
-				R.NewPackageRank = Hypixel::EPackageRank::MVP;
-			} else if (Result["newPackageRank"] == "VIP_PLUS") {
-				R.NewPackageRank = Hypixel::EPackageRank::VIP_PLUS;
-			} else if (Result["newPackageRank"] == "VIP") {
-				R.NewPackageRank = Hypixel::EPackageRank::VIP;
-			} else if (Result["newPackageRank"] == "NONE") {
-				R.NewPackageRank = Hypixel::EPackageRank::NONE;
+			R.Karma = Result["player"]["karma"];
+			R.PlayerName = Result["player"]["playername"];
+			R.LastLogout = Result["player"]["lastLogout"];
+
+			Hypixel::UHCStats UHCS{};
+
+			UHCS.Name = "UHC";
+			UHCS.Coins = Result["player"]["stats"]["UHC"]["coins"];
+			UHCS.ClearupAchievement = Result["player"]["stats"]["UHC"]["clearup_achievement"];
+			UHCS.SavedStats = Result["player"]["stats"]["UHC"]["saved_stats"];
+			UHCS.EquippedKit = Result["player"]["stats"]["UHC"]["equippedKit"];
+			UHCS.Deaths = Result["player"]["stats"]["UHC"]["deaths"];
+			UHCS.KitWorkingTools = Result["player"]["stats"]["UHC"]["kit_WORKING_TOOLS"];
+
+			R.Stats.push_back(UHCS);
+
+			Hypixel::TNTGamesStats TNTG{};
+
+			TNTG.Name = "TNTGames";
+			TNTG.Coins = Result["player"]["stats"]["TNTGames"]["coins"];
+			TNTG.Wins = Result["player"]["stats"]["TNTGames"]["wins"];
+			TNTG.NewBloodWizardRegen = Result["player"]["stats"]["TNTGames"]["new_bloodwizard_regen"];
+			TNTG.NewSpleefTripleshot = Result["player"]["stats"]["TNTGames"]["new_spleef_tripleshot"];
+			TNTG.NewFireWizardExplode = Result["player"]["stats"]["TNTGames"]["new_firewizard_explode"];
+			TNTG.NewSpleefDoubleJumps = Result["player"]["stats"]["TNTGames"]["new_spleef_double_jumps"];
+			TNTG.NewIceWizardRegen = Result["player"]["stats"]["TNTGames"]["new_icewizard_regen"];
+			TNTG.NewSpleefRepulsor = Result["player"]["stats"]["TNTGames"]["new_spleef_repulsor"];
+			TNTG.NewWitherWizardExplode = Result["player"]["stats"]["TNTGames"]["new_witherwizard_explode"];
+			TNTG.NewWitherWizardRegen = Result["player"]["stats"]["TNTGames"]["new_witherwizard_regen"];
+			TNTG.NewFireWizardRegen = Result["player"]["stats"]["TNTGames"]["new_firewizard_regen"];
+			TNTG.NewTNTTagSpeedy = Result["player"]["stats"]["TNTGames"]["new_tntag_speedy"];
+			TNTG.NewKineticWizardRegen = Result["player"]["stats"]["TNTGames"]["new_kineticwizard_explode"];
+			TNTG.NewPvpRunDoubleJumps = Result["player"]["stats"]["TNTGames"]["new_pvprun_double_jumps"];
+			TNTG.NewBloodWizardExplode = Result["player"]["stats"]["TNTGames"]["new_bloodwizard_explode"];
+			TNTG.NewKineticWizardRegen = Result["player"]["stats"]["TNTGames"]["new_kineticwizard_regen"];
+			TNTG.NewTNTRunDoubleJumps = Result["player"]["stats"]["TNTGames"]["new_tntrun_double_jumps"];
+			TNTG.NewIceWizardExplode = Result["player"]["stats"]["TNTGames"]["new_icewizard_explode"];
+			TNTG.RunPotionsSplashedOnPlayers = Result["player"]["stats"]["TNTGames"]["run_potions_splashed_on_players"];
+			TNTG.RecordTNTRun = Result["player"]["stats"]["TNTGames"]["record_tntrun"];
+			TNTG.DeathsTNTRun = Result["player"]["stats"]["TNTGames"]["deaths_tntrun"];
+			TNTG.Winstreak = Result["player"]["stats"]["TNTGames"]["winstreak"];
+			TNTG.KillsTNTTag = Result["player"]["stats"]["TNTGames"]["kills_tntag"];
+			TNTG.DeathsBowspleef = Result["player"]["stats"]["TNTGames"]["deaths_bowspleef"];
+			TNTG.TagSpeedItUp = Result["player"]["stats"]["TNTGames"]["tag_speeditup"];
+			TNTG.LastTourneyAd = Result["player"]["stats"]["TNTGames"]["lastTourneyAd"];
+
+			for (int i = 0; i < Result["player"]["stats"]["TNTGames"]["packages"].size(); i++) {
+				TNTG.Packages.push_back(Result["player"]["stats"]["TNTGames"]["packages"][i]);
 			}
-			
-			if (Result["monthlyPackageRank"] == "SUPERSTAR") {
-				R.MonthlyPackageRank = Hypixel::EMonthlyPackageRank::SUPERSTAR;
-			} else if (Result["monthlyPackageRank"] == "NONE") {
-				R.MonthlyPackageRank = Hypixel::EMonthlyPackageRank::NONE;
-			}
-			
-			
-			R.FirstLogin = Result["firstLogin"];
-			R.LastLogin = Result["lastLogin"];
-			R.LastLogout = Result["lastLogout"];
+
+			R.Stats.push_back(TNTG);
 
 			return R;
 		}
@@ -466,7 +693,7 @@ public:
 
 	static Hypixel::AuctionsDataResult GetAuctionData(int Page) {
 		cpr::Response r = cpr::Get(cpr::Url{ "https://api.hypixel.net/skyblock/auctions" },
-								               cpr::Parameters{ {"page", std::to_string(Page)}});
+								   cpr::Parameters{ {"page", std::to_string(Page)}});
 
 		const auto Result = nlohmann::json::parse(r.text);
 
@@ -575,6 +802,81 @@ public:
 			return R;
 		}
 	}
+
+	Hypixel::OnlineStatusResult GetOnlineStatusOfPlayer(std::string UUID) {
+		cpr::Response r = cpr::Get(cpr::Url{ "https://api.hypixel.net/status" },
+								   cpr::Parameters{ {"uuid", UUID } });
+
+		const auto Result = nlohmann::json::parse(r.text);
+
+		if (Result["success"] == false) {
+			Hypixel::OnlineStatusResult R{};
+
+			R.StatusCode = r.status_code;
+			R.Cause = Result["cause"];
+
+			return R;
+		} else {
+			Hypixel::OnlineStatusResult R{};
+
+			R.StatusCode = r.status_code;
+			R.UUID = Result["uuid"];
+
+			R.Session.Online = Result["session"]["online"];
+			R.Session.GameType = Result["session"]["gameType"];
+			R.Session.Mode = Result["session"]["mode"];
+			R.Session.Map = Result["session"]["map"];
+
+			return R;
+		}
+	}
+
+	Hypixel::GuildInformationResult GetGuildByGuildID(std::string GuildID) {
+		cpr::Response r = cpr::Get(cpr::Url{ "https://api.hypixel.net/guild" },
+								   cpr::Parameters{ {"id", GuildID } });
+
+		return GetGuild(r.text, r.status_code);
+	}
+
+	Hypixel::GuildInformationResult GetGuildByPlayerID(std::string PlayerID) {
+		cpr::Response r = cpr::Get(cpr::Url{ "https://api.hypixel.net/guild" },
+								   cpr::Parameters{ {"player", PlayerID } });
+
+		return GetGuild(r.text, r.status_code);
+	}
+
+	Hypixel::GuildInformationResult GetGuildByGuildName(std::string GuildName) {
+		cpr::Response r = cpr::Get(cpr::Url{ "https://api.hypixel.net/guild" },
+								   cpr::Parameters{ {"name", GuildName } });
+
+		return GetGuild(r.text, r.status_code);
+	}
+
+	Hypixel::RankedSkywarsDataResult GetRankedSkywarsInformation(std::string UUID) {
+		cpr::Response r = cpr::Get(cpr::Url{ "https://api.hypixel.net/player/ranked/skywars" },
+								   cpr::Parameters{ {"uuid", UUID } });
+
+		const auto Result = nlohmann::json::parse(r.text);
+
+		if (Result["success"] == false) {
+			Hypixel::RankedSkywarsDataResult R{};
+
+			R.StatusCode = r.status_code;
+			R.Cause = Result["cause"];
+
+			return R;
+		} else {
+			Hypixel::RankedSkywarsDataResult R{};
+
+			R.Key = Result["result"]["key"];
+			R.Position = Result["result"]["position"];
+			R.Score = Result["result"]["score"];
+		
+			return R;
+		}
+	}
+
+
 };
 
 namespace Hypixel::Utils {

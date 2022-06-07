@@ -5,55 +5,8 @@
 #include <cpr/cpr.h>
 #include "nlohmann.hpp"
 #include <fmt/core.h>
-//\n
-
-int DebugInteger = 0;
-
-void DBG() {
-	DebugInteger++;
-	std::cout << DebugInteger << std::endl;
-}
 
 namespace Hypixel {
-	//enum class ERank {
-	//	ADMIN,
-	//	MODERATOR,
-	//	HELPER,
-	//	NORMAL,
-	//};
-
-	//enum class EPackageRank {
-	//	MVP_PLUS,
-	//	MVP,
-	//	VIP_PLUS,
-	//	VIP,
-	//	NONE
-	//};
-	//
-	//enum class EMonthlyPackageRank {
-	//	SUPERSTAR,
-	//	NONE
-	//};
-
-	//enum class ECategory {
-	//	CONSUMABLES,
-	//	MISC,
-	//	ARMOR,
-	//	ACCESSORIES,
-	//	WEAPON,
-	//	BLOCKS,
-	//};
-	//
-	//enum ETier {
-	//	COMMON,
-	//	UNCOMMON,
-	//	RARE,
-	//	EPIC,
-	//	LEGENDARY,
-	//	MYTHIC,
-	//	SPECIAL,
-	//};
-
 	struct Friend {
 		std::string FriendID;
 		std::string UUIDSender;

@@ -5,6 +5,14 @@
 #include <cpr/cpr.h>
 #include "nlohmann.hpp"
 #include <fmt/core.h>
+//\n
+
+int DebugInteger = 0;
+
+void DBG() {
+	DebugInteger++;
+	std::cout << DebugInteger << std::endl;
+}
 
 namespace Hypixel {
 	struct Friend {
@@ -234,6 +242,8 @@ namespace Hypixel {
 		std::string ID;
 		std::string UUID;
 		std::string DisplayName;
+		double Level;
+		uint64_t Exp;
 		uint64_t FirstLogin;
 		std::vector<std::string> KnownAliases;
 		std::vector<std::string> KnownAliasesLower;
@@ -243,6 +253,7 @@ namespace Hypixel {
 		uint32_t Karma;
 		std::vector<_PlayerStat> Stats;
 		uint64_t LastLogout;
+		std::map<uint32_t, bool> LevelingRewards;
 	};
 
 	struct FriendsResult : BaseResult {
@@ -507,6 +518,9 @@ public:
 			R.DisplayName = Result["player"]["displayname"];
 			R.FirstLogin = Result["player"]["FirstLogin"];
 
+			R.Level = Hypixel::Utils::GetLevel(Result["player"]["networkExp"]);
+			R.Exp = Result["player"]["networkExp"];
+
 			for (int i = 0; i < Result["player"]["knownAliases"].size(); i++) {
 				R.KnownAliases.push_back(Result["player"]["knownAliases"][i]);
 				R.KnownAliasesLower.push_back(Result["player"]["knownAliasesLower"][i]);
@@ -570,6 +584,16 @@ public:
 			}
 
 			R.Stats.push_back(TNTG);
+
+			for (uint32_t i = 0; i < floor(R.Level); i++) {
+				if (Result["player"]["levelingReward_" + i].is_null()) {
+					if (Result["player"]["levelingReward_" + i] == true) {
+						R.LevelingRewards.insert(i, true);
+					} else {
+						R.LevelingRewards.insert(i, true);
+					}
+				}
+			}
 
 			return R;
 		}
@@ -841,5 +865,12 @@ namespace Hypixel::Utils {
 	std::string UUIDToUsername(std::string UUID) {
 		cpr::Response r = cpr::Get("https://api.mojang.com/user/profiles/" + UUID + "/names");
 		return nlohmann::json::parse(r.text)[0];
+	}
+
+	double GetLevel(uint64_t Exp) {
+		const uint64_t REVERSE_PQ_PREFIX = -(10000 - 0.5 * 2500) / 2500;
+		const uint64_t REVERSE_CONST = REVERSE_PQ_PREFIX * REVERSE_PQ_PREFIX;
+
+		return floor(1 + REVERSE_PQ_PREFIX + sqrt(REVERSE_CONST + 1250 * Exp));
 	}
 }
